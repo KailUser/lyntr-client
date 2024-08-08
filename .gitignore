@@ -2,4 +2,3 @@ dist
 .DS_Store
 node_modules
 lyntr-client.code-workspace
-github_publish.sh
