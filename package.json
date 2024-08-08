@@ -7,22 +7,29 @@
     "start": "electron .",
     "plus": "electron . --plus",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "debug_build": "electron-builder start"
   },
   "author": "Syirezz",
   "license": "ISC",
   "devDependencies": {
     "electron": "^31.3.1",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^24.13.3",
+    "electron-webpack": "^0.11.0"
   },
-
   "build": {
     "appId": "com.syirezz.lyntrDesktop",
     "productName": "Lyntr Desktop",
     "files": [
       "main.js",
-      "package.json"
+      "package.json",
+      "node_modules/**/*",
+      "assets/*",
+      "icon.png"
     ],
+    "directories": {
+      "buildResources": "resources"
+    },
     "mac": {
       "category": "public.app-category.utilities"
     },
