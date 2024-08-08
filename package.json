@@ -1,0 +1,39 @@
+{
+  "name": "lyntr-client",
+  "version": "0.0.5b",
+  "description": "Based lyntr client with open-source",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "plus": "electron . --plus",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-builder"
+  },
+  "author": "Syirezz",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.3.1",
+    "electron-builder": "^24.13.3"
+  },
+
+  "build": {
+    "appId": "com.syirezz.lyntrDesktop",
+    "productName": "Lyntr Desktop",
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1"
+  }
+}
