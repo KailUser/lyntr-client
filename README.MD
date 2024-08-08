@@ -1,10 +1,10 @@
-# Lyntr Desktop
+# Lyntr Desktop (Unofficial Client)
 Lyntr Desktop - Based lyntr webClient for work on desktop as Linux, Windows, MacOS.
 
 ## Tested on:
-- MacOs [Works only npm. Build glitching]
-- Linux [NOT TESTED!] (Try run use npm start | Or build idk :/)
-- Windows [Testing in progress...]
+- MacOs [Works!]
+- Linux [NOT TESTED!] (Must work | if it work dm me @syirezz in discord)
+- Windows [Works]
 
 ![Vanilla](assets/vanilla.png) 
 ![Modded](assets/modded.png)
