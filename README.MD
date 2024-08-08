@@ -10,6 +10,9 @@ Lyntr Desktop - Based lyntr webClient for work on desktop as Linux, Windows, Mac
 ![Modded](assets/modded.png)
 
 
+## Use already builded version
+If you need vanilla don't put any args, if you need modded version put `--plus`
+
 ## Build
 
 If you want build project step by this commands:

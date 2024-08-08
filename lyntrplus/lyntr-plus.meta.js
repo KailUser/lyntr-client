@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Lyntr+
-// @version      1.15.7
+// @version      1.16.2
 // @github       https://github.com/Sylicium/lyntr-plus-userscript
 // @namespace    https://lyntr.com/
 // @description  A toolbox for small and medium changes for lyntr.com ! What is it ? -> https://youtu.be/-D2L3gHqcUA
@@ -16,7 +16,7 @@
     'use strict';
 
 
-    const VERSION = "1.15.7"
+    const VERSION = "1.16.2-beta"
 
     // Imports an general functions
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -58,6 +58,12 @@
             "opacity": 0.7, // How transparent the lynts should be (0 = invisible, 1 = opaque), Default 0.7
             "overrideColor": "", // Should the color be overrided with a custom color ? If not, leave it empty. Default used #EEEBE3
             "doneClassName": "lyntr-plus-lyntTransparency-So3E25ENwU0FkobI", // DO NOT EDIT THIS LINE
+        },
+        "customLogo": {
+            "description": "Change the Lyntr logo to a custom one",
+            "enabled": true,
+            "logoURL": "https://raw.githubusercontent.com/Sylicium/lyntr-plus-userscript/main/code-assets/logo1.png", // The URL of the logo to set
+            "doneClassName": "lyntr-plus-customLogo-fFbM2sneBym9kXrE", //
         }
     }
 
@@ -66,6 +72,48 @@
     // DO NOT EDIT BELOW THIS LINE
     // ---------------------------
 
+
+    const _VERSION_CHANGELOG_ = {
+        "1.16.2-beta": {
+            "Fixes": [
+                "Actually fixed copy buttons not working correctly lol",
+            ]
+        },
+        "1.16.1-beta": {
+            "Fixes": [
+                "Fixed copy buttons not working correctly when the mention parser was disabled",
+            ]
+        },
+        "1.16.0-beta": {
+            "Features": [
+                "Added possibility to change the Lyntr logo to a custom one",
+            ],
+            "Changes": [
+                "Made the changelog not display the categories if there's no content in them",
+            ],
+            "Bugs": [
+                "Fixed version comparison not working correctly",
+            ],
+            "Other": []
+        },
+        "1.15.9-beta": {
+            "Features": [
+                "Added special display for the official Lyntr+ account",
+            ],
+            "Bugs": [
+
+            ]
+        },
+        "1.15.8-beta": {
+            "Features": [
+                "Added a changelog page for new updates"
+            ],
+            "Bugs": [
+
+            ]
+        }
+    }
+
     const _CLASSES_ = {
         lyntDiv: "flex w-full gap-3 rounded-xl bg-lynt-foreground p-3 transition-colors hover:bg-border",
         lyntDivReplied: "rounded-lg border-2 border-primary p-4 drop-shadow",
@@ -73,6 +121,10 @@
         lyntrUsername: "truncate max-w-[60%] rounded-sm text-xl font-bold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black",
         lyntrVerifiedBadge_div: "flex h-full w-7 justify-center",
         lyntrProfileButton: "static bottom-2 flex max-w-md cursor-pointer items-center gap-4 rounded-full bg-border p-4 md:absolute md:w-[250px]",
+    }
+
+    const _PATHS_ = {
+        mainLogo: "body > div:nth-child(1) > div.flex.w-full.justify-center > div > div > div.fixed.inset-x-0.bottom-0.z-50.flex.flex-col.md\\:static.md\\:flex-row > div.md\\:max-w-1\\/3.flex.w-full.min-w-full.flex-row.items-start.gap-2.px-2.py-2.md\\:w-auto.md\\:flex-col.md\\:pt-0 > button > img"
     }
 
 
@@ -89,6 +141,12 @@
         let InjectedStyle = document.createElement("style")
         InjectedStyle.id = "lyntr-plus-injected-style-eKv9p9OQYXyJdfwh"
         InjectedStyle.textContent = `
+        .lp-div-username-officialaccount-J115XR3x {
+            color: #C070FF;
+            padding: 2px 5px;
+            font-size: 24px;
+            text-shadow: 1.5px 1px black;
+        }
         .lp-div-username-author-6FjpGV7F {
             color: #FFFF00;
             padding: 2px 5px;
@@ -101,6 +159,58 @@
         .lp-div-username-verified-img-rWzoWbQ2 {
             filter: opacity(0.5) drop-shadow(0 0 0 yellow);
         }
+
+
+
+
+@media only screen (min-width: 600px) {
+    .lp-changelog2 {
+      width: 200px !important;
+    }
+}
+
+
+.lp-changelog1 {
+    position: fixed; top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lp-changelog2 {
+    position: fixed;
+    width: 600px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+
+.lp-changelog2 > .primary-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s all;
+}
+.lp-changelog2 > .primary-button:hover {
+    transition: 0.3s all;
+    background-color: #0056b3;
+}
+
+
         `
         document.head.appendChild(InjectedStyle)
     }
@@ -126,7 +236,7 @@
                     if(part.match(linkRegex)) {
                         let elem = document.createElement("a")
                         elem.href = part
-                        elem.target = "_blank"
+                        // elem.target = "_blank"
                         elem.textContent = part
                         return elem
                     } else {
@@ -194,7 +304,7 @@
                         let username = part.replace("@", "")
                         let elem = document.createElement("a")
                         elem.href = `https://lyntr.com/@${username}`
-                        elem.target = "_blank"
+                        // elem.target = "_blank"
                         elem.textContent = part
                         return elem
                     } else {
@@ -226,12 +336,47 @@
 
         let elems = [...document.getElementsByClassName(_CLASSES_.lyntrUsername)]
         elems.forEach(e => {
-            // if(e.textContent === "Sylicium") {
-            //     e.classList.add("lp-div-username-author-6FjpGV7F")
-            // } else {
-            //     e.classList.remove("lp-div-username-author-6FjpGV7F")
-            // }
+            if(e.href === document.location.origin + "/@sylicium") {
+                e.classList.add("lp-div-username-author-6FjpGV7F")
+            } else {
+                e.classList.remove("lp-div-username-author-6FjpGV7F")
+            }
         })
+    }
+
+    /**
+     * Display the official Lyntr+ account in a special way
+     */
+    async function showOfficialAccount() {
+
+        let elems = [...document.getElementsByClassName(_CLASSES_.lyntrUsername)]
+        elems.forEach(e => {
+            if(e.href === document.location.origin + "/@lyntrplus") {
+
+                if(e.nextElementSibling?.classList.contains("lp-div-username-officialaccount-forceVerifyBadge-J115XR3x")) { return } else {
+                    let badgeElem = document.createElement("button")
+                    badgeElem.innerHTML = `<div class="">
+                        <img class="h-7 w-7 lp-div-username-verified-img-rWzoWbQ2" src="verified.png" alt="This user is verified.">
+                    </div>`
+                    badgeElem.classList.add("lp-div-username-officialaccount-forceVerifyBadge-J115XR3x")
+                    // aria-describedby="XhY4Mp3TkP" id="DfoDGjU493" data-state="closed" data-melt-tooltip-trigger="" data-tooltip-trigger="" type="button"
+                    badgeElem.setAttribute("aria-describedby", "lp-div-username-officialaccount-forceVerifyBadge-J115XR3x")
+                    badgeElem.setAttribute("data-state", "closed")
+                    badgeElem.setAttribute("data-melt-tooltip-trigger", "")
+                    badgeElem.setAttribute("data-tooltip-trigger", "")
+                    badgeElem.setAttribute("type", "button")
+                    badgeElem.setAttribute("title", "Official Lyntr+ account")
+                    e.after(badgeElem)
+                }
+                e.classList.add("lp-div-username-officialaccount-J115XR3x")
+            } else {
+                e.classList.remove("lp-div-username-officialaccount-J115XR3x")
+            }
+        })
+        // Change the display when on profile page
+        if(document.location.href === document.location.origin + "/@lyntrplus") {
+            document.getElementsByClassName("peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-2xl font-bold text-primary")[0].classList.add("lp-div-username-officialaccount-J115XR3x")
+        }
     }
 
 
@@ -332,6 +477,21 @@
 
     }
 
+    /**
+     * Custom logo
+     */
+    async function customLogo() {
+        if(!_CONFIG.customLogo.enabled) return
+        let logo = document.querySelector(_PATHS_.mainLogo)
+        if(!logo) return
+        if(logo.classList.contains(_CONFIG.customLogo.doneClassName)) return
+        if(logo) {
+            logo.src = _CONFIG.customLogo.logoURL
+        }
+        logo.classList.add(_CONFIG.customLogo.doneClassName)
+    }
+
+
 
     /**
      * Create copy buttons for each message
@@ -350,7 +510,16 @@
             </button>`
             //copyButton.onclick = `copyToClipboard(this.parentElement.parentElement.querySelector(".lp-lynt-content-first-jBRHEIwW"))`
             copyButton.onclick = () => {
-                copyToClipboard(copyButton.parentElement.parentElement.querySelector(".lp-lynt-content-first-jBRHEIwW").textContent)
+                    try {
+                    let temp1 = copyButton.parentElement.parentElement.querySelector(".lp-lynt-content-first-jBRHEIwW")
+                    if(!temp1) {
+                        temp1 = [...copyButton.parentElement.parentElement.getElementsByClassName("max-w-[490px] whitespace-pre-wrap break-words text-lg")]?.[0]
+                    }
+                    copyToClipboard(temp1.textContent)
+                } catch (error) {
+                    alert(`An error occured while copying the message to the clipboard. Please try again.\n${error.stack}`)
+                    console.log(error)
+                }
             }
         
             element.after(copyButton)
@@ -375,16 +544,53 @@
             return null;
         }
         // Function to test if the version string is higher than the current version
-        function isHigherVersion(currentVersion, versionToTest) {
-            let versionToTestArray = versionToTest.split(".")
-            let currentVersionArray = currentVersion.split(".")
-            for(let i = 0; i < versionToTestArray.length; i++) {
-                if(parseInt(versionToTestArray[i]) > parseInt(currentVersionArray[i])) {
-                    return true
+        function versionCompare(v1, v2, options) {
+            var lexicographical = options && options.lexicographical,
+                zeroExtend = options && options.zeroExtend,
+                v1parts = v1.split('.'),
+                v2parts = v2.split('.');
+        
+            function isValidPart(x) {
+                return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
+            }
+        
+            if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
+                return NaN;
+            }
+        
+            if (zeroExtend) {
+                while (v1parts.length < v2parts.length) v1parts.push("0");
+                while (v2parts.length < v1parts.length) v2parts.push("0");
+            }
+        
+            if (!lexicographical) {
+                v1parts = v1parts.map(Number);
+                v2parts = v2parts.map(Number);
+            }
+        
+            for (var i = 0; i < v1parts.length; ++i) {
+                if (v2parts.length == i) {
+                    return 1;
+                }
+        
+                if (v1parts[i] == v2parts[i]) {
+                    continue;
+                }
+                else if (v1parts[i] > v2parts[i]) {
+                    return 1;
+                }
+                else {
+                    return -1;
                 }
             }
-            return false
+        
+            if (v1parts.length != v2parts.length) {
+                return -1;
+            }
+        
+            return 0;
         }
+        
 
         async function isUpToDate() {
             let lastVersionMeta = await fetch("https://raw.githubusercontent.com/Sylicium/lyntr-plus-userscript/main/production/lyntr-plus.user.js")
@@ -392,25 +598,33 @@
             // Only get the first lines of the file
             lastVersionMetaText = lastVersionMetaText.split("\n").slice(0, 10).join("\n")
             let lastVersion = extractVersionNumber(lastVersionMetaText)
-            if(isHigherVersion(VERSION, lastVersion)) {
+            let VERSION_matched = VERSION.match(/[0-9.]+/)[0]
+            let versionDiff = versionCompare(VERSION_matched, lastVersion)
+            if(versionDiff === -1) {
                 return {
                     isAnUpdate: true,
+                    comment: `[Lyntr+] AutoUpdateChecker: 🔔 An update is available for Lyntr+ v${lastVersion} (current: v${VERSION})`,
                     version: lastVersion
                 }
-            } else {
+            } else if(versionDiff === 0) {
                 return {
                     isAnUpdate: false,
+                    comment: `[Lyntr+] AutoUpdateChecker: ✅ You are up to date with the latest version of Lyntr+`,
+                    version: lastVersion
+                }
+            } else if(versionDiff === 1) {
+                return {
+                    isAnUpdate: false,
+                    comment: "[Lyntr+] AutoUpdateChecker: ✅ You are ahead of the latest version (what?)",
                     version: lastVersion
                 }
             }
+            console.error(`[Lyntr+] AutoUpdateChecker: Invalid version comparison result: ${versionDiff}`)
         }
 
 
         let UpToDate = await isUpToDate()
-
-        if(UpToDate.isAnUpdate) {
-            console.log(`[Lyntr+] An update is available for Lyntr+ v${UpToDate.version}`)
-        }
+        console.log(UpToDate.comment)
 
         let betaBox = document.getElementById("lyntr-plus-beta-mark-IjA5RKoHXIFBxQvX") || null
         let doAppendToBody = false
@@ -434,22 +648,24 @@
             betaMark.style.color = "rgb(255, 255, 255)"
             betaMark.style.fontWeight = "bold"
             betaMark.style.fontSize = "16px"
-            betaMark.textContent = `Lyntr+ Beta v${VERSION}`
+            betaMark.style.cursor = "pointer"
+            betaMark.innerHTML = `Lyntr+ Beta v${VERSION}`
+            // betaMark.onclick = () => { showChangelog() }
 
-        // let betaMarkUpdate = document.createElement("div")
-        // if(UpToDate.isAnUpdate) {
-        //     betaMarkUpdate.style.padding = "5px 10px"
-        //     betaMarkUpdate.style.backgroundColor = "rgb(0, 0, 0, 0.75)"
-        //     betaMarkUpdate.style.color = "rgb(255, 255, 255)"
-        //     betaMarkUpdate.style.fontWeight = "bold"
-        //     betaMarkUpdate.style.fontSize = "12px"
-        //     betaMarkUpdate.innerHTML = `An update is available for Lyntr+ <a href="https://raw.githubusercontent.com/Sylicium/lyntr-plus-userscript/main/production/lyntr-plus.user.js" style="color:aqua;" onclick="setTimeout(() => {if(confirm('Do you want to reload the page after updating for the changes to take effect?')) {document.location.reload()}},1000)">Click here to update to v${UpToDate.version}</a>`
-        //     document.body.appendChild(betaMarkUpdate)
-        // }
+        let betaMarkUpdate = document.createElement("div")
+        if(UpToDate.isAnUpdate) {
+            betaMarkUpdate.style.padding = "5px 10px"
+            betaMarkUpdate.style.backgroundColor = "rgb(0, 0, 0, 0.75)"
+            betaMarkUpdate.style.color = "rgb(255, 255, 255)"
+            betaMarkUpdate.style.fontWeight = "bold"
+            betaMarkUpdate.style.fontSize = "12px"
+            betaMarkUpdate.innerHTML = `An update is available for Lyntr+ <a href="https://raw.githubusercontent.com/Sylicium/lyntr-plus-userscript/main/production/lyntr-plus.user.js" style="color:aqua;" onclick="setTimeout(() => {if(confirm('Do you want to reload the page after updating for the changes to take effect?')) {document.location.reload()}},1000)">Click here to update to v${UpToDate.version}</a>`
+            document.body.appendChild(betaMarkUpdate)
+        }
 
-        // betaBox.appendChild(betaMark)
-        // betaBox.appendChild(betaMarkUpdate)
-        // if(doAppendToBody) { document.body.appendChild(betaBox) }
+        betaBox.appendChild(betaMark)
+        betaBox.appendChild(betaMarkUpdate)
+        if(doAppendToBody) { document.body.appendChild(betaBox) }
 
     }
 
@@ -457,17 +673,26 @@
     // Start Lyntr+
     (async function __start__() {
         while(true) {
-
-            injectStyle()
             
+            // =================
+            // User settings
+            // =================
+            injectStyle()
             parseMessageMentions()
             showScriptAuthor()
             showVerified()
             profileButton()
             background()
             lyntTransparency()
+            customLogo()
+            // =================
 
+            // =================
+            // Always running
+            // =================
+            showOfficialAccount()
             createCopyButtons()
+            // =================
 
             await sleep(250)
         }
@@ -498,4 +723,101 @@
     console.log("%c| Author: Sylicium", css)
     console.log("%c| GitHub: https://github.com/Sylicium/lyntr-plus-userscript", css)
 
+
+
+    function showChangelog() {
+
+        
+        // Display a box the show changelog of new version in the center of the screen
+        let element = document.createElement("div");
+        let list = "0123456789abcdef".split("");
+        let btn_id = `lp-changelog-temp-button-${Array(32).fill(null).map(x => list[Math.floor(Math.random() * list.length)]).join("")}`;
+
+
+        let CHANGELOG_TEXT = ""
+        if(_VERSION_CHANGELOG_.hasOwnProperty(VERSION)) {
+            for(let categoryName in _VERSION_CHANGELOG_[VERSION]) {
+                if(_VERSION_CHANGELOG_[VERSION][categoryName].length == 0) continue;
+                
+                CHANGELOG_TEXT += `<p style="margin-bottom: 10px;">${categoryName}</p>`
+                CHANGELOG_TEXT += `<ul style="margin: 0px 0px 10px 20px;list-style-type: '- ';">`
+                for(let change of _VERSION_CHANGELOG_[VERSION][categoryName]) {
+                    CHANGELOG_TEXT += `<li>${change}</li>`
+                }
+                CHANGELOG_TEXT += `</ul>`
+            }
+        } else {
+            CHANGELOG_TEXT = `<p style="margin-bottom: 10px;">Changelog is missing for this version</p>`
+        }
+
+        element.innerHTML = `
+        <div class="lp-changelog2">
+            <h1 style="font-size: 1.5em; margin-bottom: 10px;text-align:center;">Lyntr+ changelog ${VERSION}</h1>
+
+
+            ${CHANGELOG_TEXT}
+            
+
+            <button class="primary-button" id='${btn_id}'>OK</button>
+            <a class="primary-button" href="https://github.com/Sylicium/lyntr-plus-userscript" target="_BLANK">GitHub</button>
+        </div>
+        `;
+        element.className = "lp-changelog1";
+
+
+
+        document.body.appendChild(element);
+        document.getElementById(btn_id).addEventListener("click", () => {
+            element.remove();
+        })
+
+    }
+
+    function checkAutoDisplayChangelog() {
+        
+        let displayChangelog = false
+        if(localStorage.getItem("lyntr-plus-currentVersion") != VERSION) {
+            displayChangelog = true
+            console.log("New version detected, displaying changelog")
+        }
+        localStorage.setItem("lyntr-plus-currentVersion", VERSION)
+        if(!displayChangelog) return;
+        // showChangelog()
+    }
+
+    checkAutoDisplayChangelog()
+
+
+
+    // Hey ! Here's a little easter egg for you
+    // When doing the word per minute challenge, you can paste the following code in the console to automatically fill the input field with the text to type (giving you average 42000 words per minute)
+    // Unfortunately, you can't earn more than 60 points in total for this challenge.
+    /*
+
+    (function wordPerMinute() {
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+        function getText() { return [...document.getElementsByClassName("whitespace-pre-wrap font-mono text-lg")[0].children].map(x => x.textContent).join("") }
+
+        async function start() {
+            let inputElem = null
+            while(true) {
+                try {
+                    if(!inputElem) {
+                        inputElem = document.getElementsByClassName("flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50")[0]
+                    }
+                    let text = getText()
+                    inputElem.value = text
+                    inputElem.dispatchEvent(new Event('input', { bubbles: true }))
+            } catch(e) { console.log("error", e) }
+                await sleep(10)
+            }
+        }
+    })();
+
+    */
+
+
 })();
+
+

@@ -1,6 +1,6 @@
 {
   "name": "lyntr-client",
-  "version": "0.0.5b",
+  "version": "0.0.6b",
   "description": "Based lyntr client with open-source",
   "main": "main.js",
   "scripts": {
@@ -24,7 +24,7 @@
       "main.js",
       "package.json",
       "node_modules/**/*",
-      "assets/*",
+      "lyntrplus/*",
       "icon.png"
     ],
     "directories": {
