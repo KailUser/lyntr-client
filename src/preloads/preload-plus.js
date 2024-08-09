@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = require('path');
     const { ipcRenderer } = require('electron');
 
-    const preloadScriptPath = path.join("..", 'lyntrplus' ,'lyntr-plus.meta.js');
+    const preloadScriptPath = path.join(__dirname, 'lyntrplus', 'lyntr-plus.meta.js');
     const preloadScript = fs.readFileSync(preloadScriptPath, 'utf8');
 
     const preloadScriptElement = document.createElement('script');

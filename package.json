@@ -1,14 +1,13 @@
 {
   "name": "lyntr-client",
-  "version": "0.0.6b",
+  "version": "0.0.7b",
   "description": "Based lyntr client with open-source",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "plus": "electron . --plus",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "electron-builder",
-    "debug_build": "electron-builder start"
+    "build": "electron-builder"
   },
   "author": "Syirezz",
   "license": "ISC",
@@ -20,24 +19,31 @@
   "build": {
     "appId": "com.syirezz.lyntrDesktop",
     "productName": "Lyntr Desktop",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
     "files": [
-      "main.js",
+      "resources/**/*",
+      "src/**/*",
       "package.json",
-      "node_modules/**/*",
-      "lyntrplus/*",
-      "icon.png"
+      "node_modules/**/*"
     ],
+    "extraMetadata": {
+      "main": "src/main.js"
+    },
     "directories": {
-      "buildResources": "resources"
+      "output": "dist"
     },
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "target": "dmg",
+      "icon": "src/icon.png"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "src/icon.png"
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "icon": "src/icon.png"
     }
   },
   "dependencies": {
