@@ -52,7 +52,7 @@ function createWindow() {
       preload: process.argv.find((arg) => arg.startsWith('--payload='))
         ? path.join(__dirname, process.argv.find((arg) => arg.startsWith('--payload=')).split('=')[1])
         : undefined,
-      contextIsolation: false,
+      contextIsolation: true,
     },
     icon: icon,
     autoHideMenuBar: true,
